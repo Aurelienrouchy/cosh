@@ -1,10 +1,10 @@
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 import axios from 'axios';
-import { useEventsContext } from '../provider/EventProvider';
+import { useEventsContext } from '../../provider/EventProvider';
 
 const UpdateEventButton = () => {
-  const { setEvents } = useEventsContext();
+  const { setEvents, buttonIsVisible, setButtonIsVisible } = useEventsContext();
 
   const updateEvents = async () => {
     // const distance = event.latitudeDelta * 69 * 1.609344 * 1000;

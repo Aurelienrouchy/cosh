@@ -2,51 +2,46 @@ import React, {
   createContext,
   Dispatch,
   FC,
+  RefObject,
   useContext,
-  useEffect,
+  useRef,
   useState,
 } from 'react';
-import AddressEditorModal from '../components/AddressEditorModal/AddressEditorModal';
-import * as Location from 'expo-location';
+import MapView, { LatLng } from 'react-native-maps';
+import { DEFAULT_COORD_FRANCE } from '../screens/GetLocation';
 
-interface AddressProvider {
+export type GeoCode = {
+  latitude: number;
+  longitude: number;
+};
+
+interface MapProvider {
   selectedAddress: string;
   setSelectedAddress: Dispatch<string>;
-  range: number;
-  setRange: Dispatch<number>;
-  location: Location.LocationObject;
-  setLocation: Dispatch<Location.LocationObject>;
+  radius: number;
+  setRadius: Dispatch<number>;
+  location?: LatLng;
+  setLocation: Dispatch<LatLng>;
   setIsOpenAddressEditor: Dispatch<boolean>;
   isOpenAddressEditor: boolean;
+  mapRef: RefObject<MapView>;
 }
 
-export const AddressContext = createContext({} as AddressProvider);
-export const AddressProvider: FC = ({ children }) => {
-  const [status, requestPermission] = Location.useForegroundPermissions();
+export const RADIUS_BASE_IN_METRE = 10 * 1000;
 
-  const [range, setRange] = useState<number>(1);
+export const MapContext = createContext({} as MapProvider);
+export const MapProvider: FC = ({ children }) => {
+  const mapRef = useRef<MapView>(null);
+
+  const [radius, setRadius] = useState<number>(RADIUS_BASE_IN_METRE);
   const [selectedAddress, setSelectedAddress] = useState<string>('');
-  const [location, setLocation] = useState<Location.LocationObject>(
-    {} as Location.LocationObject,
-  );
-
-  useEffect(() => {
-    (async () => {
-      if (!status?.granted) {
-        await requestPermission();
-      }
-
-      const location = await Location.getCurrentPositionAsync({});
-
-      setLocation(location);
-    })();
-  }, []);
+  const [location, setLocation] = useState<LatLng>(DEFAULT_COORD_FRANCE);
 
   const [isOpenAddressEditor, setIsOpenAddressEditor] =
     useState<boolean>(false);
 
   return (
-    <AddressContext.Provider
+    <MapContext.Provider
       value={{
         isOpenAddressEditor,
         setIsOpenAddressEditor,
@@ -54,14 +49,15 @@ export const AddressProvider: FC = ({ children }) => {
         setLocation,
         selectedAddress,
         setSelectedAddress,
-        range,
-        setRange,
+        radius,
+        setRadius,
+        mapRef,
       }}
     >
-      <AddressEditorModal />
+      {/*<AddressEditorModal />*/}
       {children}
-    </AddressContext.Provider>
+    </MapContext.Provider>
   );
 };
 
-export const useAddressContext = () => useContext(AddressContext);
+export const useMapContext = () => useContext(MapContext);

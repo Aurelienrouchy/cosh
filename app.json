@@ -19,13 +19,32 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.aurelienrouchy.gettag",
+      "infoPlist": {
+        "NSLocationUsageDescription":
+        "The app needs permission to access your location, if you want to be located on the map.",
+        "NSLocationWhenInUseUsageDescription": "The app needs permission to access your location, if you want to be located on the map",
+        "NSLocationAlwaysUsageDescription": "The app needs permission to access your location, if you want to be located on the map",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "The app needs permission to access your location, if you want to be located on the map",
+        "NSPhotoLibraryUsageDescription": "The app needs permission to your camera roll, if you want to upload pictures.",
+        "NSCameraUsageDescription": "The app needs permission to your camera, if you want to take pictures from the app.",
+        "UIBackgroundModes": [
+          "location",
+          "fetch"
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION"
+      ]
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
