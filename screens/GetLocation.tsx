@@ -1,17 +1,14 @@
-import React, { useCallback, useEffect } from 'react';
-import {
-  Image,
-  Keyboard,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import React from 'react';
+import { Image, StyleSheet, KeyboardAvoidingView, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as ExpoLocation from 'expo-location';
-import { GeoCode, useMapContext } from '../provider/MapProvider';
-import { height, width } from '../constants/Layout';
+import { DEFAULT_COORD_FRANCE, useMapContext } from '../provider/MapProvider';
+import {
+  height,
+  MODAL_HEIGHT,
+  RESULTS_ADDRESS_HEIGHT,
+  width,
+} from '../constants/Layout';
 import AddressFinder from '../components/AddressFinder/AddressFinder';
 import Button from '../components/Button/Button';
 import Animated, {
@@ -19,51 +16,118 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
+import { ICONS_NAME } from '../constants/Icon';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../navigation';
+import { getAddressFromGeoCode } from '../services/googleGeocode';
+import { Address } from '../services/types';
+import { BASE_URL } from '../constants/utils';
 import axios from 'axios';
-import { API_KEY } from '../constants/utils';
+import { useUserContext } from '../provider/UserProvider';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const DEFAULT_COORD_FRANCE = {
-  latitude: 46,
-  longitude: 2,
-};
+type GetLocationScreenProp = StackNavigationProp<RootStackParamList, 'Home'>;
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const MarkerImage = require('../components/Map/record.png');
 
 const GetLocation = () => {
-  const { setLocation, setIsOpenAddressEditor, location } = useMapContext();
-  const requestPermissions = async () => {
+  const { setAddress, address, setLocation, location, altitude, setAltitude } =
+    useMapContext();
+  const { setUser } = useUserContext();
+  const navigation = useNavigation<GetLocationScreenProp>();
+
+  const handleCurrentLocation = async () => {
     try {
       const foreground = await ExpoLocation.requestForegroundPermissionsAsync();
-      console.log(foreground);
+
       if (foreground.granted) {
-        await ExpoLocation.requestBackgroundPermissionsAsync();
+        const requestedLocation = await ExpoLocation.getCurrentPositionAsync({
+          accuracy: 100,
+        });
 
-        const requestedLocation = await ExpoLocation.getCurrentPositionAsync();
+        const { latitude, longitude } = requestedLocation.coords;
 
-        setLocation(requestedLocation.coords);
+        const address: Address = await getAddressFromGeoCode({
+          latitude,
+          longitude,
+        });
+
+        setLocation({ latitude, longitude });
+        setAddress(address);
+
+        translateY.value = withSpring(1);
       }
     } catch (err) {
-      console.log(err);
+      console.log({ err });
     }
   };
 
-  useEffect(() => {
-    setIsOpenAddressEditor(true);
-  }, []);
-
-  const getCurrentLocation = () => {};
-  const handlePress = () => {};
-
-  const animatedValue = useSharedValue(-100);
-  const animatedStyleForButton = useAnimatedStyle(() => ({
-    transform: [
+  const handleChangeText = (text: string) => {
+    modalHeight.value = withSpring(
+      text.length ? RESULTS_ADDRESS_HEIGHT + MODAL_HEIGHT : MODAL_HEIGHT,
       {
-        translateY: -animatedValue.value,
+        mass: 0.6,
       },
-    ],
+    );
+  };
+
+  const setAsyncStorageUserId = async (id: string) => {
+    try {
+      return await AsyncStorage.setItem('userId', id);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handlePress = async () => {
+    if (!address) {
+      // TODO: Afficher message d'erreur
+      return;
+    }
+
+    const payload = {
+      placeId: address?.place_id,
+      geocode: {
+        type: 'Point',
+        coordinates: [address?.geocode.lat, address?.geocode.lng],
+      },
+    };
+
+    try {
+      // TODO : Ajouter un loader
+      const res = await axios.post(BASE_URL + '/user/', payload);
+
+      setAsyncStorageUserId(res.data.id);
+
+      setUser(res.data);
+    } catch (e) {
+      // TODO: Afficher message d'erreur
+      console.log(e);
+    }
+  };
+
+  const translateY = useSharedValue(0);
+  const animatedStyleForButton = useAnimatedStyle(() => ({
+    opacity: translateY.value,
   }));
 
-  const handleSelectAddress = (address: string, geoCode: GeoCode) => {
-    animatedValue.value = withSpring(0);
+  const modalHeight = useSharedValue(MODAL_HEIGHT);
+  const animatedStyleModal = useAnimatedStyle(() => ({
+    height: modalHeight.value,
+    marginTop: -modalHeight.value,
+  }));
+
+  const handleSelectAddress = (address: any): void => {
+    setAddress(address);
+
+    setLocation({
+      latitude: address.geocode.lat,
+      longitude: address.geocode.lng,
+    });
+
+    modalHeight.value = MODAL_HEIGHT;
+    translateY.value = withSpring(1);
   };
 
   return (
@@ -71,30 +135,36 @@ const GetLocation = () => {
       <MapView
         style={styles.map}
         camera={{
-          center: location || DEFAULT_COORD_FRANCE,
+          center: location,
           heading: 0,
           pitch: 0,
           zoom: 0,
-          altitude: location ? 6000 : 3000000,
+          altitude: altitude,
         }}
       >
-        <Marker coordinate={location || DEFAULT_COORD_FRANCE}>
-          <Image style={styles.marker} source={MarkerImage} />
-        </Marker>
+        <View style={styles.cache} />
+        {location !== DEFAULT_COORD_FRANCE && (
+          <Marker coordinate={location}>
+            <Image style={styles.marker} source={MarkerImage} />
+          </Marker>
+        )}
       </MapView>
-      <Animated.View style={[styles.button, animatedStyleForButton]}>
-        <Button onPress={handlePress} text="Let's go" />
-      </Animated.View>
-      <View style={styles.modal}>
+      <Animated.View style={[styles.modal, animatedStyleModal]}>
+        <Animated.View style={[styles.button, animatedStyleForButton]}>
+          <Button onPress={handlePress} text="Let's go" />
+        </Animated.View>
         <Button
-          onlyText={false}
-          onPress={getCurrentLocation}
+          onPress={handleCurrentLocation}
           text="Get current location"
           textStyle={styles.buttonLocationText}
           style={styles.buttonLocation}
+          iconName={ICONS_NAME.NAVIGATION}
         />
-        <AddressFinder handleSelect={handleSelectAddress} />
-      </View>
+        <AddressFinder
+          onChangeText={handleChangeText}
+          onSelect={handleSelectAddress}
+        />
+      </Animated.View>
     </KeyboardAvoidingView>
   );
 };
@@ -106,18 +176,28 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   modal: {
+    bottom: 30,
+    left: 20,
     backgroundColor: '#FFF',
-    width,
-    height: height / 3,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    paddingHorizontal: 30,
+    width: width - 40,
+    height: MODAL_HEIGHT,
+    borderRadius: 30,
     paddingVertical: 20,
     alignItems: 'center',
+
+    shadowColor: '#9c9c9c',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+    elevation: 7,
   },
   map: {
     flex: 1,
   },
+  cache: { flex: 1 },
   marker: {
     width: 15,
     height: 15,
@@ -125,14 +205,24 @@ const styles = StyleSheet.create({
   button: {
     width,
     alignItems: 'center',
+    top: -80,
     position: 'absolute',
-    bottom: height / 3 + 30,
   },
   buttonLocation: {
     marginBottom: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   buttonLocationText: {
     color: '#000',
     fontWeight: 'bold',
+  },
+  loading: {
+    width: 100,
+    height: 100,
+    position: 'absolute',
+    top: height / 2 - 50,
+    left: width / 2 - 50,
+    backgroundColor: 'red',
   },
 });

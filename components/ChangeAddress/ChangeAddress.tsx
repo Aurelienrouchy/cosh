@@ -3,15 +3,15 @@ import { useMapContext } from '../../provider/MapProvider';
 import { width } from '../../constants/Layout';
 
 const ChangeAddress = () => {
-  const { setIsOpenAddressEditor, selectedAddress, range } = useMapContext();
+  const { setIsOpenAddressEditor, address, altitude } = useMapContext();
 
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
         <Text style={styles.address}>
-          {selectedAddress.slice(0, width / 15) || 'Changer de lieu'}
+          {address?.formatted_address.slice(0, width / 15) || 'Changer de lieu'}
         </Text>
-        <Text style={styles.distance}>{range} Km</Text>
+        <Text style={styles.distance}>{altitude / 1000} Km</Text>
       </View>
       <Pressable
         style={styles.button}

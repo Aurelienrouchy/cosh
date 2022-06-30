@@ -4,39 +4,43 @@ import React, {
   FC,
   RefObject,
   useContext,
+  useEffect,
   useRef,
   useState,
 } from 'react';
-import MapView, { LatLng } from 'react-native-maps';
-import { DEFAULT_COORD_FRANCE } from '../screens/GetLocation';
-
-export type GeoCode = {
-  latitude: number;
-  longitude: number;
-};
+import MapView from 'react-native-maps';
+import { Address, LatitudeLongitude } from '../services/types';
 
 interface MapProvider {
-  selectedAddress: string;
-  setSelectedAddress: Dispatch<string>;
-  radius: number;
-  setRadius: Dispatch<number>;
-  location?: LatLng;
-  setLocation: Dispatch<LatLng>;
+  location: LatitudeLongitude;
+  setLocation: Dispatch<LatitudeLongitude>;
   setIsOpenAddressEditor: Dispatch<boolean>;
   isOpenAddressEditor: boolean;
   mapRef: RefObject<MapView>;
+  altitude: number;
+  setAltitude: Dispatch<number>;
+  address?: Address;
+  setAddress: Dispatch<Address>;
 }
 
-export const RADIUS_BASE_IN_METRE = 10 * 1000;
+export const DEFAULT_COORD_FRANCE = {
+  latitude: 46,
+  longitude: 2,
+};
 
 export const MapContext = createContext({} as MapProvider);
 export const MapProvider: FC = ({ children }) => {
   const mapRef = useRef<MapView>(null);
+  // const { user } = useUserContext();
+  const [address, setAddress] = useState<Address>();
+  const [location, setLocation] =
+    useState<LatitudeLongitude>(DEFAULT_COORD_FRANCE);
 
-  const [radius, setRadius] = useState<number>(RADIUS_BASE_IN_METRE);
-  const [selectedAddress, setSelectedAddress] = useState<string>('');
-  const [location, setLocation] = useState<LatLng>(DEFAULT_COORD_FRANCE);
+  const [altitude, setAltitude] = useState<number>(3000000);
 
+  useEffect(() => {
+    setAltitude(location === DEFAULT_COORD_FRANCE ? 3000000 : 6000);
+  }, [location]);
   const [isOpenAddressEditor, setIsOpenAddressEditor] =
     useState<boolean>(false);
 
@@ -47,11 +51,11 @@ export const MapProvider: FC = ({ children }) => {
         setIsOpenAddressEditor,
         location,
         setLocation,
-        selectedAddress,
-        setSelectedAddress,
-        radius,
-        setRadius,
         mapRef,
+        altitude,
+        setAltitude,
+        address,
+        setAddress,
       }}
     >
       {/*<AddressEditorModal />*/}

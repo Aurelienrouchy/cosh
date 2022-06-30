@@ -1,5 +1,6 @@
 const tintColorLight = '#2f95dc';
 const tintColorDark = '#fff';
+export const PLACEHOLDER_COLOR = '#9b9b9b';
 
 export default {
   light: {

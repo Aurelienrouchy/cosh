@@ -3,15 +3,20 @@
 <plist version="1.0">
   <dict>
     <key>NSLocationUsageDescription</key>
-    <string>Your geolocation string</string>
+    <string>The app needs permission to access your location, if you want to be located on the map.</string>
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Your geolocation string</string>
+    <string>The app needs permission to access your location, if you want to be located on the map</string>
     <key>NSLocationAlwaysUsageDescription</key>
-    <string>Your geolocation string</string>
+    <string>The app needs permission to access your location, if you want to be located on the map</string>
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>Your geolocation string</string>
+    <string>The app needs permission to access your location, if you want to be located on the map</string>
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
+    <key>UIBackgroundModes</key>
+    <array>
+      <string>location</string>
+      <string>fetch</string>
+    </array>
     <key>CFBundleDisplayName</key>
     <string>gettag</string>
     <key>CFBundleExecutable</key>
@@ -41,17 +46,17 @@
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>LSRequiresIPhoneOS</key>
-    <true/>
+    <true />
     <key>NSAppTransportSecurity</key>
     <dict>
       <key>NSAllowsArbitraryLoads</key>
-      <true/>
+      <true />
       <key>NSExceptionDomains</key>
       <dict>
         <key>localhost</key>
         <dict>
           <key>NSExceptionAllowsInsecureHTTPLoads</key>
-          <true/>
+          <true />
         </dict>
       </dict>
     </dict>
@@ -62,7 +67,7 @@
       <string>armv7</string>
     </array>
     <key>UIRequiresFullScreen</key>
-    <false/>
+    <false />
     <key>UIStatusBarStyle</key>
     <string>UIStatusBarStyleDefault</string>
     <key>UISupportedInterfaceOrientations</key>
@@ -80,6 +85,6 @@
     <key>UIUserInterfaceStyle</key>
     <string>Automatic</string>
     <key>UIViewControllerBasedStatusBarAppearance</key>
-    <false/>
+    <false />
   </dict>
 </plist>

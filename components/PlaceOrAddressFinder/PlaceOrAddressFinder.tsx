@@ -22,6 +22,7 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import { Address, AddressResults } from '../../services/types';
+import { PLACEHOLDER_COLOR } from '../../constants/Colors';
 
 interface AddressFinderProps {
   onSelect: (address: Address) => void;
@@ -29,7 +30,7 @@ interface AddressFinderProps {
   resetAfterSelect?: boolean;
 }
 
-const AddressFinder: FC<AddressFinderProps> = ({
+const PlaceOrAddressFinder: FC<AddressFinderProps> = ({
   onSelect,
   onChangeText,
   resetAfterSelect = false,
@@ -61,7 +62,7 @@ const AddressFinder: FC<AddressFinderProps> = ({
   }));
 
   useEffect(() => {
-    resultsHeight.value = withSpring(results.length ? MODAL_HEIGHT : 0, {
+    resultsHeight.value = withSpring(results.length ? results.length * 40 : 0, {
       mass: 0.6,
     });
   }, [results]);
@@ -72,7 +73,8 @@ const AddressFinder: FC<AddressFinderProps> = ({
         style={styles.input}
         onChangeText={handleSearchAddress}
         value={address}
-        placeholder="Enter address"
+        placeholder="Chercher un lieu ou une adresse"
+        placeholderTextColor={PLACEHOLDER_COLOR}
         clearButtonMode="while-editing"
       />
       {results.length > 0 && (
@@ -93,13 +95,13 @@ const AddressFinder: FC<AddressFinderProps> = ({
   );
 };
 
-export default AddressFinder;
+export default PlaceOrAddressFinder;
 
 const styles = StyleSheet.create({
   input: {
     height: 50,
     backgroundColor: 'white',
-    width: width - 80,
+    width: width - 40,
     borderRadius: 10,
     overflow: 'hidden',
     paddingHorizontal: 20,
@@ -111,6 +113,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 10,
     overflow: 'hidden',
+    borderColor: '#000',
+    borderWidth: 1,
   },
   result: {
     height: 40,

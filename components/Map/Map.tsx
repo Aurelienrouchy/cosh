@@ -3,7 +3,6 @@ import MapView, { Marker } from 'react-native-maps';
 import { useMapContext } from '../../provider/MapProvider';
 import MiniaturesPlan from '../MiniaturesPlan/MiniaturesPlan';
 import { useEventsContext } from '../../provider/EventProvider';
-import axios from 'axios';
 import { useMemo, useState } from 'react';
 
 const MarkerImage = require('./record.png');

@@ -5,32 +5,21 @@ import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import { MapProvider } from './provider/MapProvider';
-import { SafeAreaView, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { EventProvider } from './provider/EventProvider';
 
 import './services/firebase';
-import axios from 'axios';
+import { UserProvider } from './provider/UserProvider';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
 
-  useEffect(() => {
-    axios
-      .post(
-        'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyC9pUKLIFmjNgAX5u1u_ZGPuEOpCZS6tmY',
-      )
-      .then((response) =>
-        console.log('response' + JSON.stringify(response.data)),
-      )
-      .catch((err) => console.log('err' + err));
-  }, []);
-
   if (!isLoadingComplete) {
     return null;
   } else {
     return (
-      <SafeAreaView style={[styles.container]}>
+      <UserProvider>
         <MapProvider>
           <EventProvider>
             <SafeAreaProvider>
@@ -39,7 +28,9 @@ export default function App() {
             </SafeAreaProvider>
           </EventProvider>
         </MapProvider>
-      </SafeAreaView>
+      </UserProvider>
+
+      // </SafeAreaView>
     );
   }
 }

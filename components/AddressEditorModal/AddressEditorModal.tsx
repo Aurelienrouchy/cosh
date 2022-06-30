@@ -30,7 +30,7 @@ const AddressEditorModal = () => {
       onBackdropPress={() => setIsOpenAddressEditor(false)}
     >
       <View style={styles.container}>
-        <AddressFinder />
+        {/* <AddressFinder /> */}
         <RadiusSelector />
       </View>
     </Modal>

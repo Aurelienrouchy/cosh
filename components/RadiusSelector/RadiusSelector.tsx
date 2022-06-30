@@ -5,14 +5,14 @@ import { height, width } from '../../constants/Layout';
 import { useMapContext } from '../../provider/MapProvider';
 
 const RadiusSelector = () => {
-  const { radius, setRadius } = useMapContext();
+  const { altitude, setAltitude } = useMapContext();
 
   return (
     <View style={styles.container}>
-      <Text style={styles.rangeText}>{radius / 1000} Km</Text>
+      <Text style={styles.rangeText}>{altitude / 1000} Km</Text>
       <Slider
-        value={radius / 1000}
-        onValueChange={(value) => setRadius(+value * 1000)}
+        value={altitude / 1000}
+        onValueChange={(value) => setAltitude(+value * 1000)}
         minimumValue={1}
         maximumValue={50}
         step={1}

@@ -4,8 +4,10 @@ import {
   Text,
   TextStyle,
   ViewStyle,
+  Image,
 } from 'react-native';
 import React, { FC } from 'react';
+import { icons, ICONS_NAME } from '../../constants/Icon';
 
 interface ButtonProps {
   onPress: () => void;
@@ -13,6 +15,7 @@ interface ButtonProps {
   onlyText?: boolean;
   style?: ViewStyle;
   textStyle?: TextStyle;
+  iconName?: ICONS_NAME;
 }
 
 const Button: FC<ButtonProps> = ({
@@ -21,9 +24,14 @@ const Button: FC<ButtonProps> = ({
   text,
   style,
   textStyle,
+  iconName,
 }) => {
   return (
-    <Pressable style={[onlyText && styles.container, style]} onPress={onPress}>
+    <Pressable
+      style={[onlyText && !style && styles.container, style]}
+      onPress={onPress}
+    >
+      {iconName && <Image style={styles.icon} source={icons[iconName]} />}
       <Text style={[styles.text, textStyle]}>{text}</Text>
     </Pressable>
   );
@@ -43,5 +51,10 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     color: '#FFF',
+  },
+  icon: {
+    width: 15,
+    height: 15,
+    marginRight: 10,
   },
 });
