@@ -18,12 +18,19 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.aurelienrouchy.gettag",
       "infoPlist": {
-        "NSLocationUsageDescription":
-        "The app needs permission to access your location, if you want to be located on the map.",
+        "NSLocationUsageDescription": "The app needs permission to access your location, if you want to be located on the map.",
         "NSLocationWhenInUseUsageDescription": "The app needs permission to access your location, if you want to be located on the map",
         "NSLocationAlwaysUsageDescription": "The app needs permission to access your location, if you want to be located on the map",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "The app needs permission to access your location, if you want to be located on the map",
@@ -44,7 +51,8 @@
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION",
         "ACCESS_BACKGROUND_LOCATION"
-      ]
+      ],
+      "package": "com.cosh"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

@@ -21,6 +21,10 @@ export type SearchStackParamList = {
   Liste: undefined;
   Plan: undefined;
 };
+export type EventStackParamList = {
+  Events: undefined;
+  AddEvent: undefined;
+};
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, Screen>;
@@ -30,7 +34,7 @@ export type RootTabParamList = {
   Search: NativeStackScreenProps<SearchStackParamList>;
   Favorites: undefined;
   Settings: undefined;
-  MyEvents: undefined;
+  MyEvents: NativeStackScreenProps<EventStackParamList>;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> =

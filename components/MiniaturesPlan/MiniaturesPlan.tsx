@@ -29,12 +29,8 @@ const MiniaturesPlan = () => {
       mapRef.current.animateCamera(
         {
           center: {
-            latitude:
-              events[currentIndex < 0 ? 0 : currentIndex].location
-                .coordinates[1],
-            longitude:
-              events[currentIndex < 0 ? 0 : currentIndex].location
-                .coordinates[0],
+            latitude: events[currentIndex < 0 ? 0 : currentIndex].geocode.lat,
+            longitude: events[currentIndex < 0 ? 0 : currentIndex].geocode.lng,
           },
         },
         { duration: 150 },

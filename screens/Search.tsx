@@ -1,9 +1,6 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { View } from '../components/Themed';
-import ChangeAddress, {
-  CHANGE_ADDRESS_HEIGHT,
-} from '../components/ChangeAddress/ChangeAddress';
 import { width } from '../constants/Layout';
 import SwitchButton, {
   SWITCH_BUTTON_HEIGHT,
@@ -28,7 +25,7 @@ export default function Search() {
 
   return (
     <View style={styles.container}>
-      <BlurView intensity={10} style={styles.header}>
+      <View style={styles.header}>
         {/*<ChangeAddress />*/}
         <SwitchButton
           texts={['Liste', 'Plan']}
@@ -39,7 +36,7 @@ export default function Search() {
             });
           }}
         />
-      </BlurView>
+      </View>
       <View style={styles.container}>
         <Animated.View style={[styles.inner, translateXAnimated]}>
           <EventsList />
@@ -67,6 +64,7 @@ const styles = StyleSheet.create({
   header: {
     ...StyleSheet.absoluteFillObject,
     zIndex: 200,
+    backgroundColor: 'transparent',
     width,
     paddingTop: 20,
     paddingHorizontal: 20,

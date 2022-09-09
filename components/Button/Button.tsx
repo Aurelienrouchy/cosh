@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import React, { FC } from 'react';
 import { icons, ICONS_NAME } from '../../constants/Icon';
+import { TouchableOpacity } from 'react-native';
 
 interface ButtonProps {
   onPress: () => void;
@@ -27,13 +28,13 @@ const Button: FC<ButtonProps> = ({
   iconName,
 }) => {
   return (
-    <Pressable
+    <TouchableOpacity
       style={[onlyText && !style && styles.container, style]}
       onPress={onPress}
     >
       {iconName && <Image style={styles.icon} source={icons[iconName]} />}
       <Text style={[styles.text, textStyle]}>{text}</Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 

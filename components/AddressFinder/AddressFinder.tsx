@@ -5,8 +5,9 @@ import {
   Text,
   TextInput,
   Keyboard,
+  TextStyle,
 } from 'react-native';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import {
   MODAL_HEIGHT,
   RESULTS_ADDRESS_HEIGHT,
@@ -21,31 +22,38 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
-import { Address, AddressResults } from '../../services/types';
+import { IAddress } from '../../services/types';
 
 interface AddressFinderProps {
-  onSelect: (address: Address) => void;
+  onSelect: (address: IAddress) => void;
   onChangeText: (address: string) => void;
   resetAfterSelect?: boolean;
+  style?: TextStyle | TextStyle[];
+  resultsStyle?: TextStyle;
 }
 
 const AddressFinder: FC<AddressFinderProps> = ({
   onSelect,
   onChangeText,
   resetAfterSelect = false,
+  style,
+  resultsStyle,
 }) => {
   const [address, setAddress] = useState<string>('');
-  const [results, setResults] = useState<AddressResults[]>([]);
+  const [results, setResults] = useState<any[]>([]);
 
   const handleSearchAddress = (text: string) => {
     onChangeText(text);
     setAddress(text);
     getAddressFromText(text).then((data) => {
+      resultsHeight.value = withSpring(data.length ? MODAL_HEIGHT : 0, {
+        mass: 0.6,
+      });
       return setResults(data);
     });
   };
 
-  const handleSelectAddress = (result: AddressResults) => {
+  const handleSelectAddress = (result: any) => {
     getAddressFromPlaceId(result.place_id).then((address) => {
       onSelect(address);
     });
@@ -60,23 +68,19 @@ const AddressFinder: FC<AddressFinderProps> = ({
     height: resultsHeight.value,
   }));
 
-  useEffect(() => {
-    resultsHeight.value = withSpring(results.length ? MODAL_HEIGHT : 0, {
-      mass: 0.6,
-    });
-  }, [results]);
-
   return (
     <>
       <TextInput
-        style={styles.input}
+        style={[styles.input, style]}
         onChangeText={handleSearchAddress}
         value={address}
         placeholder="Enter address"
         clearButtonMode="while-editing"
       />
       {results.length > 0 && (
-        <Animated.View style={[styles.results, animatedStyleResults]}>
+        <Animated.View
+          style={[styles.results, animatedStyleResults, resultsStyle]}
+        >
           <ScrollView>
             {results.map((res) => (
               <TouchableOpacity

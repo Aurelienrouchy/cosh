@@ -26,6 +26,7 @@ import { useMapContext } from '../provider/MapProvider';
 import { getAddressFromGeoCode } from '../services/googleGeocode';
 import { Address } from '../services/types';
 import MyEvents from '../screens/MyEvents';
+import CreateEvent from '../screens/CreateEvent';
 
 export default function Navigation({
   colorScheme,
@@ -97,7 +98,7 @@ function RootNavigator() {
 
   return (
     <RootStack.Navigator>
-      {user ? (
+      {true ? (
         <RootStack.Screen
           name="Home"
           component={BottomTabNavigator}
@@ -139,6 +140,32 @@ function SearchNav() {
   );
 }
 
+export type EventStackParamList = {
+  Events: undefined;
+  CreateEvent: undefined;
+};
+const EventStack = createNativeStackNavigator<EventStackParamList>();
+
+function EventNav() {
+  return (
+    <EventStack.Navigator>
+      <EventStack.Screen
+        name="Events"
+        component={MyEvents}
+        options={{ headerShown: false }}
+      />
+      <EventStack.Screen
+        name="CreateEvent"
+        component={CreateEvent}
+        options={{
+          headerShown: false,
+          presentation: 'modal',
+        }}
+      />
+    </EventStack.Navigator>
+  );
+}
+
 export type BottomTabStackParamList = {
   Discover: undefined;
   Search: undefined;
@@ -174,8 +201,8 @@ function BottomTabNavigator() {
           }}
         />
         <BottomTab.Screen
-          name="Favorites"
-          component={Favorites}
+          name="MyEvents"
+          component={EventNav}
           options={{
             headerShown: false,
           }}
@@ -183,13 +210,6 @@ function BottomTabNavigator() {
         <BottomTab.Screen
           name="Settings"
           component={Settings}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <BottomTab.Screen
-          name="MyEvents"
-          component={MyEvents}
           options={{
             headerShown: false,
           }}

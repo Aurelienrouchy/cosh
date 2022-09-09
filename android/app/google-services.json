@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "316784870707",
+    "project_id": "cosh-c827a",
+    "storage_bucket": "cosh-c827a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:316784870707:android:c507a085fffebabe4caa46",
+        "android_client_info": {
+          "package_name": "com.cosh"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "316784870707-tcd0ebjdakdcab57ani4bspnq0450vvi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cosh",
+            "certificate_hash": "4bc4f3c7bcc11d2375fcc8a80e675f5c2ea3220f"
+          }
+        },
+        {
+          "client_id": "316784870707-irhm3c6ld6ideg9ophv01igri98latbp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE6ydvw3aJAx5isQejQvGpjVfEGmqqEak"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "316784870707-irhm3c6ld6ideg9ophv01igri98latbp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

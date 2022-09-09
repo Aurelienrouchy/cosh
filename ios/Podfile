@@ -6,6 +6,7 @@ platform :ios, '12.0'
 
 require 'json'
 podfile_properties = JSON.parse(File.read('./Podfile.properties.json')) rescue {}
+use_frameworks! :linkage => :static
 
 target 'gettag' do
   use_expo_modules!

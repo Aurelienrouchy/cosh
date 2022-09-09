@@ -10,6 +10,8 @@
     <string>The app needs permission to access your location, if you want to be located on the map</string>
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
     <string>The app needs permission to access your location, if you want to be located on the map</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>$(PRODUCT_NAME) would like access to your photo gallery.</string>
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>UIBackgroundModes</key>

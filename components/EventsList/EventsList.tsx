@@ -1,6 +1,4 @@
 import React, { StyleSheet, ScrollView, View } from 'react-native';
-import { CHANGE_ADDRESS_HEIGHT } from '../ChangeAddress/ChangeAddress';
-import { SWITCH_BUTTON_HEIGHT } from '../SwitchButton/SwitchButton';
 import { useEventsContext } from '../../provider/EventProvider';
 import EventMiniature from '../EventMiniature/EventMiniature';
 

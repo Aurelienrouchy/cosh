@@ -8,15 +8,15 @@ import {
   Pressable,
 } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { Event } from '../provider/EventProvider';
 import { height, width } from '../constants/Layout';
 import { SharedElement } from 'react-navigation-shared-element';
 import IconAndText from '../components/IconAndText/IconAndText';
 import MapView, { Marker } from 'react-native-maps';
 import PeoplesAreJoined from '../components/PeoplesAreJoined/PeoplesAreJoined';
+import { IEvent } from '../services/types';
 
 const EventScreen: FC = () => {
-  const route: RouteProp<{ params: { event: Event } }, 'params'> = useRoute();
+  const route: RouteProp<{ params: { event: IEvent } }, 'params'> = useRoute();
   const event = route.params.event;
   const navigation = useNavigation();
 
@@ -83,7 +83,7 @@ const EventScreen: FC = () => {
             icon={
               'https://cdn-icons.flaticon.com/png/512/3421/premium/3421853.png?token=exp=1651158462~hmac=b444f393178de415615c83eb7d3b6518'
             }
-            title={event.organisation}
+            title={event.userId[0]}
             subTitle={event.place}
             style={styles.textAndIcon}
           />

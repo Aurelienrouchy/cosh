@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
 import { StyleSheet, Pressable, Text, Image } from 'react-native';
 import { width } from '../../constants/Layout';
-import { Event } from '../../provider/EventProvider';
 import { BlurView } from 'expo-blur';
 import { useNavigation } from '@react-navigation/native';
+import { IEvent } from '../../services/types';
 
 interface EventMiniatureProps {
-  event: Event;
+  event: IEvent;
 }
 
 const EventMiniature: FC<EventMiniatureProps> = ({ event }) => {
@@ -14,8 +14,6 @@ const EventMiniature: FC<EventMiniatureProps> = ({ event }) => {
   const dateStart = '20 MAI';
 
   const navigation = useNavigation();
-
-  console.log(event.coverUri);
 
   return (
     <Pressable
@@ -40,7 +38,7 @@ const EventMiniature: FC<EventMiniatureProps> = ({ event }) => {
 
       <BlurView intensity={10} style={styles.inner}>
         <Text style={styles.date}>{`${dateStart} ${
-          event.dateEnd ? ' - '.concat(dateEnd) : ''
+          event.endAt ? ' - '.concat(dateEnd) : ''
         }`}</Text>
         <Text numberOfLines={1} style={styles.title}>
           {event.title}

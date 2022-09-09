@@ -5,6 +5,7 @@ import MiniaturesPlan from '../MiniaturesPlan/MiniaturesPlan';
 import { useEventsContext } from '../../provider/EventProvider';
 import { useMemo, useState } from 'react';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const MarkerImage = require('./record.png');
 
 const MapComponent = () => {
@@ -12,19 +13,15 @@ const MapComponent = () => {
   const { events, setEvents } = useEventsContext();
   const [altitude, setAltitude] = useState(10000);
 
-  const onRegionChangeComplete = async (event) => {
+  const onRegionChangeComplete = async () => {
     // setUpdateEventsButtonVisible(true);
   };
 
   const camera = useMemo(
     () => ({
       center: {
-        latitude: events
-          ? events[0].location.coordinates[1]
-          : location.latitude,
-        longitude: events
-          ? events[0].location.coordinates[0]
-          : location.longitude,
+        latitude: events ? events[0].geocode.lat : location.latitude,
+        longitude: events ? events[0].geocode.lng : location.longitude,
       },
       heading: 0,
       pitch: 0,
@@ -43,12 +40,12 @@ const MapComponent = () => {
         camera={camera}
       >
         {events.length &&
-          events.map(({ location, title }) => (
+          events.map(({ geocode, title }) => (
             <Marker
               key={title}
               coordinate={{
-                latitude: location.coordinates[1],
-                longitude: location.coordinates[0],
+                latitude: geocode.lat,
+                longitude: geocode.lng,
               }}
             >
               <Image style={styles.marker} source={MarkerImage} />
