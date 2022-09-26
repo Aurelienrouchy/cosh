@@ -31,6 +31,7 @@ const CreatePlaceForm: FC = () => {
       email: '',
       categories: [''],
       priceRange: '',
+      priceRane: '',
     },
   });
   const ref = useRef<KeyboardAwareScrollView>(null);
